@@ -25,5 +25,13 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Run PostgreSQL
+      run: |
+        cd ..
+        docker compose up -d
+    - name: Run Database Migration
+      run: |
+        dotnet tool install --global dotnet-ef
+        dotnet ef database update
     - name: Test
       run: dotnet test --no-build --verbosity normal
