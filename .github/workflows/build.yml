@@ -33,6 +33,7 @@ jobs:
         WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
     - name: Run Database Migration
       run: |
+        cd Soat.AntiGaspi.Api
         dotnet tool install --global dotnet-ef
         dotnet ef database update
     - name: Test
