@@ -5,6 +5,10 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+    
+defaults:
+ run:
+  working-directory: ./src
 
 jobs:
   build:
@@ -18,12 +22,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: |
-        cd src
-        dotnet restore
+      run: dotnet restore
     - name: Build
-      run: |
-        cd src
-        dotnet build --no-restore
+      run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
