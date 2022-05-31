@@ -26,9 +26,11 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Run PostgreSQL
-      run: |
-        cd ..
-        docker compose up -d
+      run: docker compose up -d
+    - name: Wait for Database to be up...
+      run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- localhost:5432 -- echo "Database is up"
+      env:
+        WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
     - name: Run Database Migration
       run: |
         dotnet tool install --global dotnet-ef
