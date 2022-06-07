@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: always
+    ports:
+      - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@soat.fr
+      PGADMIN_DEFAULT_PASSWORD: password
