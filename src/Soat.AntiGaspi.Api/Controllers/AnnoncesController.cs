@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Soat.AntiGaspi.Api.Contracts;
 using Soat.AntiGaspi.Api.Models;
 using Soat.AntiGaspi.Api.Repository;
@@ -25,11 +26,11 @@ namespace Soat.AntiGaspi.Api.Controllers
         }
 
         [HttpGet("")]
-        public Task<IEnumerable<Annonce>> Get()
+        public async Task<ActionResult<IEnumerable<Annonce>>> Get()
         {
-            return Task.FromResult(
-                Enumerable.Range(1, 5).Select(index => new Annonce())
-            );
+            var annonces = await _antiGaspiContext.Annonces.ToListAsync();
+
+            return Ok(_mapper.Map<IEnumerable<Annonce>>(annonces));
         }
 
         [HttpGet("{id}")]
