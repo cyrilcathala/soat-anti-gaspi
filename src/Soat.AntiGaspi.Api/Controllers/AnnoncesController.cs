@@ -28,7 +28,7 @@ namespace Soat.AntiGaspi.Api.Controllers
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<Annonce>>> Get()
         {
-            var annonces = await _antiGaspiContext.Annonces.ToListAsync();
+            var annonces = await _antiGaspiContext.Annonces.ToArrayAsync();
 
             return Ok(_mapper.Map<IEnumerable<Annonce>>(annonces));
         }
