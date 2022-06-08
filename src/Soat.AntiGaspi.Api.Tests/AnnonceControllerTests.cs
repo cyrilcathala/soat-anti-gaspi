@@ -5,6 +5,7 @@ using Soat.AntiGaspi.Api.Models;
 using Soat.AntiGaspi.Api.Tests.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,7 +70,15 @@ namespace Soat.AntiGaspi.Api.Tests
         [Fact]
         public async Task Should_DeleteAnnonce_When_DeletionIsOK()
         {
-            throw new NotImplementedException();
+            var deleteAnnonceResponse = await _httpClient.DeleteAsync("/api/annonces/463e5d9f-5998-456d-8c91-fa522f2a2469");
+            Assert.True(deleteAnnonceResponse.IsSuccessStatusCode);
+        }
+
+        [Fact]
+        public async Task Should_DeleteAnnonce_ReturnNotFound_When_AnnonceNotExist()
+        {
+            var deleteAnnonceResponse = await _httpClient.DeleteAsync("/api/annonces/078c6290-b80b-4157-9758-de4af6705f4d");
+            Assert.Equal(HttpStatusCode.NotFound, deleteAnnonceResponse.StatusCode);
         }
     }
 }
