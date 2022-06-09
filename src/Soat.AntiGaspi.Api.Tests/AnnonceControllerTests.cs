@@ -80,5 +80,15 @@ namespace Soat.AntiGaspi.Api.Tests
             var deleteAnnonceResponse = await _httpClient.DeleteAsync("/api/annonces/078c6290-b80b-4157-9758-de4af6705f4d");
             Assert.Equal(HttpStatusCode.NotFound, deleteAnnonceResponse.StatusCode);
         }
+
+        [Fact]
+        public async Task Should_ConfirmAnnonce_When_ConfirmationIsOK()
+        {
+            var confirmAnnonceResponse = await _httpClient.PostAsync("/api/annonces/7675d27b-241c-48a9-aa03-4047095ec353/confirm", null);
+            Assert.True(confirmAnnonceResponse.IsSuccessStatusCode);
+            var confirmedAnnonce = await confirmAnnonceResponse.ReadAsObject<Annonce>();
+            Assert.NotNull(confirmedAnnonce);
+            Assert.Equal(AnnonceStatus.Active, confirmedAnnonce.Status);
+        }
     }
 }
