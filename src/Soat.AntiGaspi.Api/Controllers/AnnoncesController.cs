@@ -62,9 +62,20 @@ namespace Soat.AntiGaspi.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            return Ok();
+            try
+            {
+                var annonce = new Annonce { Id = id };
+                _antiGaspiContext.Annonces.Remove(annonce);                
+                var nbChanges = await _antiGaspiContext.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+            }
         }
     }
 }
