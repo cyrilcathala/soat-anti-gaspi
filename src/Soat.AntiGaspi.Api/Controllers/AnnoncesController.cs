@@ -56,9 +56,17 @@ namespace Soat.AntiGaspi.Api.Controllers
         }
 
         [HttpPost("{id}/confirm")]
-        public IActionResult Confirm(Guid id)
+        public async Task<IActionResult> Confirm(Guid id)
         {
-            return Ok();
+            Annonce? annonce = await _antiGaspiContext.Annonces.FindAsync(id);
+            if (annonce is null)
+            {
+                return NotFound();
+            }
+            annonce.Status = AnnonceStatus.Active;
+            await _antiGaspiContext.SaveChangesAsync();
+
+            return Ok(_mapper.Map<Annonce>(annonce));
         }
 
         [HttpDelete("{id}")]
