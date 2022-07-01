@@ -2,6 +2,7 @@ using AutoFixture;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Soat.AntiGaspi.Api.Contracts;
+using Soat.AntiGaspi.Api.Controllers;
 using Soat.AntiGaspi.Api.Models;
 using Soat.AntiGaspi.Api.Tests.Extensions;
 using System;
@@ -30,19 +31,12 @@ namespace Soat.AntiGaspi.Api.Tests
         }
 
         [Fact]
+        [Trait(nameof(OffersController.Get), "Success")]
         public async Task Get_Should_ReturnCollection_When_OK()
         {
-            var createOfferRequest = _fixture.Build<CreateOfferRequest>()
-                                             .With(c => c.Email, "toto@toto.fr")
-                                             .With(c => c.Availability, DateTime.UtcNow)
-                                             .With(c => c.Expiration, DateTime.UtcNow.AddDays(42))
-                                             .Create();
+            var offerId = await CreateOffer();
 
-            var createOfferResponse = await _httpClient.PostAsync("/api/offers", createOfferRequest);
-
-            var offerId = await createOfferResponse.ReadAsObject<string>();
-
-            var confirmResponse = await _httpClient.PostAsync($"/api/offers/{offerId}/confirm", string.Empty);
+            await _httpClient.PostAsync($"/api/offers/{offerId}/confirm", string.Empty);
 
             var httpResponse = await _httpClient.GetAsync("/api/offers");
 
@@ -53,6 +47,7 @@ namespace Soat.AntiGaspi.Api.Tests
         }
 
         [Fact]
+        [Trait(nameof(OffersController.Create), "Success")]
         public async Task Should_CreateAnOffer_When_CreationIsOK()
         {
             var expectedTitle = "This is a title";
@@ -77,20 +72,10 @@ namespace Soat.AntiGaspi.Api.Tests
         }
 
         [Fact]
+        [Trait(nameof(OffersController.Delete), "Success")]
         public async Task Should_DeleteOffer_When_DeletionIsOK()
         {
-            var expectedTitle = "This is a title";
-
-            var createOfferRequest = _fixture.Build<CreateOfferRequest>()
-                .With(c => c.Title, expectedTitle)
-                .With(c => c.Email, "toto@toto.fr")
-                .With(c => c.Availability, DateTime.UtcNow)
-                .With(c => c.Expiration, DateTime.UtcNow.AddDays(42))
-                .Create();
-
-            var createOfferResponse = await _httpClient.PostAsync("/api/offers", createOfferRequest);
-
-            var offerId = await createOfferResponse.ReadAsObject<string>();
+            var offerId = await CreateOffer();
 
             var deleteOfferResponse = await _httpClient.DeleteAsync($"/api/offers/{offerId}");
 
@@ -98,6 +83,7 @@ namespace Soat.AntiGaspi.Api.Tests
         }
 
         [Fact]
+        [Trait(nameof(OffersController.Delete), "Not Found")]
         public async Task Should_DeleteOffer_ReturnNotFound_When_OfferNotExist()
         {
             var nonExistingGuid = Guid.NewGuid();
@@ -108,22 +94,47 @@ namespace Soat.AntiGaspi.Api.Tests
         }
 
         [Fact]
+        [Trait(nameof(OffersController.Confirm), "Success")]
         public async Task Should_ConfirmOffer_When_ConfirmationIsOK()
         {
-            var createOfferRequest = _fixture.Build<CreateOfferRequest>()
-                                             .With(c => c.Email, "toto@toto.fr")
-                                             .With(c => c.Availability, DateTime.UtcNow)
-                                             .With(c => c.Expiration, DateTime.UtcNow.AddDays(42))
-                                             .Create();
-
-            var createOfferResponse = await _httpClient.PostAsync("/api/offers", createOfferRequest);
-
-            var offerId = await createOfferResponse.ReadAsObject<string>();
-            var location = createOfferResponse.Headers.Location;
+            var offerId = await CreateOffer();
 
             var confirmResponse = await _httpClient.PostAsync($"/api/offers/{offerId}/confirm", string.Empty);
 
             Assert.True(confirmResponse.IsSuccessStatusCode);
+        }
+
+        [Fact]
+        [Trait(nameof(OffersController.Contact), "Success")]
+        public async Task Should_ContactOffer_When_ContactRequestIsOK()
+        {
+            var offerId = await CreateOffer();
+
+            await _httpClient.PostAsync($"/api/offers/{offerId}/confirm", string.Empty);
+
+            var contactRequest = _fixture
+               .Build<ContactRequest>()
+               .With(c => c.Email, "toto@toto.fr")
+               .With(c => c.Phone, (string?)null)
+               .Create();
+
+            var contactResponse = await _httpClient.PostAsync($"/api/offers/{offerId}/contact", contactRequest);
+
+            Assert.True(contactResponse.IsSuccessStatusCode);
+        }
+
+        private async Task<string> CreateOffer()
+        {
+            var createOfferRequest = _fixture
+                .Build<CreateOfferRequest>()
+                .With(c => c.Email, "toto@toto.fr")
+                .With(c => c.Availability, DateTime.UtcNow)
+                .With(c => c.Expiration, DateTime.UtcNow.AddDays(42))
+                .Create();
+
+            var createOfferResponse = await _httpClient.PostAsync("/api/offers", createOfferRequest);
+
+            return await createOfferResponse.ReadAsObject<string>();
         }
     }
 }

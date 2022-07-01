@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using Soat.AntiGaspi.Api.Contracts;
 using Soat.AntiGaspi.Api.Contracts.Paging;
 using Soat.AntiGaspi.Api.Models;
@@ -16,17 +18,20 @@ namespace Soat.AntiGaspi.Api.Controllers
         private readonly ILogger<OffersController> _logger;
         private readonly AntiGaspiContext _antiGaspiContext;
         private readonly IMapper _mapper;
+        private readonly ISendGridClient _sendGridClient;
 
         private delegate IOrderedQueryable<TSource> OrderByAscendingOrDescending<TSource, TKey>(IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector);
 
         public OffersController(
             AntiGaspiContext antiGaspiContext,
             IMapper mapper,
+            ISendGridClient sendGridClient,
             ILogger<OffersController> logger)
         {
             _logger = logger;
             _antiGaspiContext = antiGaspiContext;
             _mapper = mapper;
+            this._sendGridClient = sendGridClient;
         }
 
         [HttpGet]
@@ -133,6 +138,34 @@ namespace Soat.AntiGaspi.Api.Controllers
             {
                 return NotFound();
             }
+        }
+
+
+        [HttpPost("{id}/contact")]
+        public async Task<IActionResult> Contact(Guid id, [FromBody] ContactRequest contactRequest)
+        {
+            Offer? offer = await _antiGaspiContext.Offers.FindAsync(id);
+            if (offer is null)
+            {
+                return NotFound();
+            }
+
+            var contactOffer = _mapper.Map<ContactOffer>(contactRequest);
+            contactOffer.OfferId = id;
+            
+            _antiGaspiContext.Add(contactOffer);
+            await _antiGaspiContext.SaveChangesAsync();
+
+            var mail = new SendGridMessage
+            {
+                From = new EmailAddress("antigaspi@soat.fr"),
+                Subject = "Coucou toi"
+            };
+            mail.AddContent(MimeType.Html, "<html>Salut en <strong>gras</strong></html>");
+            mail.AddTo(offer.Email);
+            await _sendGridClient.SendEmailAsync(mail);
+
+            return Ok();
         }
     }
 }

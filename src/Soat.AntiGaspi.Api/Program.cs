@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using SendGrid.Extensions.DependencyInjection;
 using Soat.AntiGaspi.Api.Repository;
 
 namespace Soat.AntiGaspi.Api;
@@ -19,6 +20,7 @@ public class Program
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["SendGridApiKey"]);
 
         builder.Services.AddDbContext<AntiGaspiContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("AntiGaspiContext")));
