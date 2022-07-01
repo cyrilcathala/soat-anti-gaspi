@@ -12,8 +12,8 @@ using Soat.AntiGaspi.Api.Repository;
 namespace Soat.AntiGaspi.Api.Migrations
 {
     [DbContext(typeof(AntiGaspiContext))]
-    [Migration("20220531132509_UpdateAnnonceModel")]
-    partial class UpdateAnnonceModel
+    [Migration("20220531132509_UpdateOfferModel")]
+    partial class UpdateOfferModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace Soat.AntiGaspi.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Soat.AntiGaspi.Api.Models.Annonce", b =>
+            modelBuilder.Entity("Soat.AntiGaspi.Api.Models.Offer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,7 +61,7 @@ namespace Soat.AntiGaspi.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Annonces", "antigaspi");
+                    b.ToTable("Offers", "antigaspi");
                 });
 #pragma warning restore 612, 618
         }

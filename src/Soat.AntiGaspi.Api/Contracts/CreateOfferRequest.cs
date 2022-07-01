@@ -1,6 +1,6 @@
 ﻿namespace Soat.AntiGaspi.Api.Contracts;
 
-public class CreateAnnonceRequest
+public class CreateOfferRequest
 {
     public string? Title { get; init; }
 

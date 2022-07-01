@@ -2,9 +2,9 @@
 
 namespace Soat.AntiGaspi.Api.Contracts.Validators;
 
-public class CreateAnnonceRequestValidator : AbstractValidator<CreateAnnonceRequest>
+public class CreateOfferRequestValidator : AbstractValidator<CreateOfferRequest>
 {
-    public CreateAnnonceRequestValidator()
+    public CreateOfferRequestValidator()
     {
         RuleFor(x => x.Email)
             .NotEmpty()

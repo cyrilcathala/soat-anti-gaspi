@@ -1,6 +1,6 @@
 ﻿namespace Soat.AntiGaspi.Api.Models
 {
-    public class Annonce
+    public class Offer
     {
         public Guid Id { get; set; }
 
@@ -18,6 +18,6 @@
 
         public DateTime? Expiration { get; set; }
 
-        public AnnonceStatus Status { get; set; }
+        public OfferStatus Status { get; set; }
     }    
 }

@@ -12,7 +12,7 @@ namespace Soat.AntiGaspi.Api.Migrations
                 name: "antigaspi");
 
             migrationBuilder.CreateTable(
-                name: "Annonces",
+                name: "Offers",
                 schema: "antigaspi",
                 columns: table => new
                 {
@@ -20,14 +20,14 @@ namespace Soat.AntiGaspi.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Annonces", x => x.Id);
+                    table.PrimaryKey("PK_Offers", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Annonces",
+                name: "Offers",
                 schema: "antigaspi");
         }
     }

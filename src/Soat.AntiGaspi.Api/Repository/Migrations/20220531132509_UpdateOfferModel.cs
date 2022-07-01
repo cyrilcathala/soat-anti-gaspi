@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Soat.AntiGaspi.Api.Migrations
 {
-    public partial class UpdateAnnonceModel : Migration
+    public partial class UpdateOfferModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
                 name: "Address",
                 schema: "antigaspi",
-                table: "Annonces",
+                table: "Offers",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
@@ -20,14 +20,14 @@ namespace Soat.AntiGaspi.Api.Migrations
             migrationBuilder.AddColumn<DateTime>(
                 name: "Availability",
                 schema: "antigaspi",
-                table: "Annonces",
+                table: "Offers",
                 type: "timestamp with time zone",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "CompanyName",
                 schema: "antigaspi",
-                table: "Annonces",
+                table: "Offers",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
@@ -35,7 +35,7 @@ namespace Soat.AntiGaspi.Api.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Description",
                 schema: "antigaspi",
-                table: "Annonces",
+                table: "Offers",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
@@ -43,7 +43,7 @@ namespace Soat.AntiGaspi.Api.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Email",
                 schema: "antigaspi",
-                table: "Annonces",
+                table: "Offers",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
@@ -51,14 +51,14 @@ namespace Soat.AntiGaspi.Api.Migrations
             migrationBuilder.AddColumn<DateTime>(
                 name: "Expiration",
                 schema: "antigaspi",
-                table: "Annonces",
+                table: "Offers",
                 type: "timestamp with time zone",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "Status",
                 schema: "antigaspi",
-                table: "Annonces",
+                table: "Offers",
                 type: "integer",
                 nullable: false,
                 defaultValue: 0);
@@ -66,7 +66,7 @@ namespace Soat.AntiGaspi.Api.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Title",
                 schema: "antigaspi",
-                table: "Annonces",
+                table: "Offers",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
@@ -77,42 +77,42 @@ namespace Soat.AntiGaspi.Api.Migrations
             migrationBuilder.DropColumn(
                 name: "Address",
                 schema: "antigaspi",
-                table: "Annonces");
+                table: "Offers");
 
             migrationBuilder.DropColumn(
                 name: "Availability",
                 schema: "antigaspi",
-                table: "Annonces");
+                table: "Offers");
 
             migrationBuilder.DropColumn(
                 name: "CompanyName",
                 schema: "antigaspi",
-                table: "Annonces");
+                table: "Offers");
 
             migrationBuilder.DropColumn(
                 name: "Description",
                 schema: "antigaspi",
-                table: "Annonces");
+                table: "Offers");
 
             migrationBuilder.DropColumn(
                 name: "Email",
                 schema: "antigaspi",
-                table: "Annonces");
+                table: "Offers");
 
             migrationBuilder.DropColumn(
                 name: "Expiration",
                 schema: "antigaspi",
-                table: "Annonces");
+                table: "Offers");
 
             migrationBuilder.DropColumn(
                 name: "Status",
                 schema: "antigaspi",
-                table: "Annonces");
+                table: "Offers");
 
             migrationBuilder.DropColumn(
                 name: "Title",
                 schema: "antigaspi",
-                table: "Annonces");
+                table: "Offers");
         }
     }
 }

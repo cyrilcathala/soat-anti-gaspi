@@ -1,6 +1,6 @@
 ﻿namespace Soat.AntiGaspi.Api.Models;
 
-public enum AnnonceStatus
+public enum OfferStatus
 {
     Pending,
     Active,

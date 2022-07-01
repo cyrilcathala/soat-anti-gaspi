@@ -1,6 +1,6 @@
 ﻿namespace Soat.AntiGaspi.Api.Repository
 {
-    public class AnnonceRepository
+    public class OfferRepository
     {
         
     }

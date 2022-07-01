@@ -7,10 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soat.AntiGaspi.Api", "Soat.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86CB6BAA-1982-45A3-83D8-3AF5D7952F11}"
 	ProjectSection(SolutionItems) = preProject
+		postgres\01_Insert_Annonce.sql = postgres\01_Insert_Annonce.sql
+		docker-compose.ci.yml = docker-compose.ci.yml
+		docker-compose.pgsql.yml = docker-compose.pgsql.yml
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soat.AntiGaspi.Api.Tests", "Soat.AntiGaspi.Api.Tests\Soat.AntiGaspi.Api.Tests.csproj", "{D4E514EE-0FB0-4853-A1A8-1975975418B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soat.AntiGaspi.Api.Tests", "Soat.AntiGaspi.Api.Tests\Soat.AntiGaspi.Api.Tests.csproj", "{D4E514EE-0FB0-4853-A1A8-1975975418B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
