@@ -42,9 +42,10 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
 
     [Fact]
     [Trait(nameof(CleanContactsJob), "Success")]
-    public async Task Should_ContactOffer_When_ContactRequestIsOK()
+    public async Task Should_CleanContacts_When_OlderThan30Days()
     {
         var offerId = await CreateContact();
+        _dateTimeOffsetFake.Now = DateTimeOffset.UtcNow.AddDays(35);
 
         await Task.Delay(TimeSpan.FromMinutes(1));
 
