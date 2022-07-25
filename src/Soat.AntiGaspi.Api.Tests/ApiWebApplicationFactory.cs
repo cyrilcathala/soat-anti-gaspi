@@ -28,14 +28,14 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>
     {
         services.AddScoped(s => new Mock<ISendGridClient>().Object);
 
-        _configureServices(services);
+        _configureServices?.Invoke(services);
     }
 
     private void ConfigureApp(
         WebHostBuilderContext hostContext,
         IConfigurationBuilder configurationBuilder)
     {
-        _configureBuilder(configurationBuilder);
+        _configureBuilder?.Invoke(configurationBuilder);
     }
 
     public void Configure(
