@@ -11,29 +11,40 @@ public class CleanContactsJob : BackgroundService
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly IDateTimeOffset _dateTimeOffset;
+    private readonly ILogger<CleanContactsJob> _logger;
     private readonly string _cleanContactsTimer;
 
     public CleanContactsJob(
         IServiceScopeFactory serviceScopeFactory,        
         IConfiguration configuration,
-        IDateTimeOffset dateTimeOffset)
+        IDateTimeOffset dateTimeOffset,
+        ILogger<CleanContactsJob> logger)
     {
         _serviceScopeFactory = serviceScopeFactory;
         _dateTimeOffset = dateTimeOffset;
+        _logger = logger;
         _cleanContactsTimer = configuration.GetValue<string>(AppSettingKeys.CleanContactsTimer);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using var timer = new CronTimer(CronExpression.Parse(_cleanContactsTimer, CronFormat.IncludeSeconds), TimeZoneInfo.Local);
+        using var timer = new CronTimer(
+            CronExpression.Parse(_cleanContactsTimer, CronFormat.IncludeSeconds), TimeZoneInfo.Local);
 
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
-            await CleanContacts();
+            try
+            {
+                await CleanContacts();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, null);
+            }
         }
     }
 
-    private Task CleanContacts()
+    private async Task CleanContacts()
     {
         using var scope = _serviceScopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AntiGaspiContext>();
@@ -46,6 +57,6 @@ public class CleanContactsJob : BackgroundService
             context.Remove(contact);
         }
 
-        return context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 }
