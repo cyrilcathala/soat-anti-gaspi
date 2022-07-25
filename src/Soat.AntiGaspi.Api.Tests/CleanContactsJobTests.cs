@@ -28,7 +28,7 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
         _dateTimeOffsetFake = new DateTimeOffsetFake();
         webAppFactory.Configure(
             services => services.AddSingleton<IDateTimeOffset>(_dateTimeOffsetFake),
-            configurationBuilder => configurationBuilder.Properties.Add(AppSettingKeys.CleanContactsTimer, "*/1 * * * *"));
+            configurationBuilder => configurationBuilder.Properties.Add(AppSettingKeys.CleanContactsTimer, "*/10 * * * * *"));
 
         _httpClient = webAppFactory.CreateClient(new WebApplicationFactoryClientOptions
         {
@@ -46,7 +46,7 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
         var offerId = await CreateContact();
         _dateTimeOffsetFake.Now = DateTimeOffset.UtcNow.AddDays(35);
 
-        await Task.Delay(TimeSpan.FromMinutes(1));
+        await Task.Delay(TimeSpan.FromSeconds(30));
 
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AntiGaspiContext>();

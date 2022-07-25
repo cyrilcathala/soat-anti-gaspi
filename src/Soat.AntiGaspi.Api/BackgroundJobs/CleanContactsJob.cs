@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Cronos;
 using Sgbj.Cron;
 using Soat.AntiGaspi.Api.Constants;
 using Soat.AntiGaspi.Api.Repository;
@@ -25,7 +25,7 @@ public class CleanContactsJob : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using var timer = new CronTimer(_cleanContactsTimer, TimeZoneInfo.Local);
+        using var timer = new CronTimer(CronExpression.Parse(_cleanContactsTimer, CronFormat.IncludeSeconds), TimeZoneInfo.Local);
 
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
