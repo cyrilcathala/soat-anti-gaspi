@@ -24,7 +24,7 @@ public class CreateOfferRequestValidator : AbstractValidator<CreateOfferRequest>
 
         RuleFor(x => x.Availability)
             .NotNull()
-            .Must(availability => DateTime.UtcNow.Date <= availability);
+            .Must(availability => DateTimeOffset.UtcNow.Date <= availability);
 
         RuleFor(x => x.Expiration)
             .NotNull();
