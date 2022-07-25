@@ -20,9 +20,9 @@ namespace Soat.AntiGaspi.Api.Tests
         private readonly HttpClient _httpClient;
         private readonly Fixture _fixture;
 
-        public OffersControllerTests(ApiWebApplicationFactory fixture)
+        public OffersControllerTests(ApiWebApplicationFactory webAppFactory)
         {
-            _httpClient = fixture.CreateClient(new WebApplicationFactoryClientOptions
+            _httpClient = webAppFactory.CreateClient(new WebApplicationFactoryClientOptions
             {
                 BaseAddress = new Uri(ApiWebApplicationFactory.ApiUrl)
             });

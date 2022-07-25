@@ -1,21 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Extensions.Configuration;
 using Sgbj.Cron;
+using Soat.AntiGaspi.Api.Constants;
 using Soat.AntiGaspi.Api.Repository;
+using Soat.AntiGaspi.Api.Time;
 
 namespace Soat.AntiGaspi.Api.BackgroundJobs;
 public class CleanContactsJob : BackgroundService
 {
-    private readonly AntiGaspiContext _antiGaspiContext;
     private const int CleanExpirationInDays = 30;
 
-    public CleanContactsJob(AntiGaspiContext antiGaspiContext)
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IDateTimeOffset _dateTimeOffset;
+    private readonly string _cleanContactsTimer;
+
+    public CleanContactsJob(
+        IServiceScopeFactory serviceScopeFactory,        
+        IConfiguration configuration,
+        IDateTimeOffset dateTimeOffset)
     {
-        _antiGaspiContext = antiGaspiContext;
+        _serviceScopeFactory = serviceScopeFactory;
+        _dateTimeOffset = dateTimeOffset;
+        _cleanContactsTimer = configuration.GetValue<string>(AppSettingKeys.CleanContactsTimer);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    { 
-        using var timer = new CronTimer("0 6 * * *", TimeZoneInfo.Local);
+    {
+        using var timer = new CronTimer(_cleanContactsTimer, TimeZoneInfo.Local);
 
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
@@ -25,14 +35,17 @@ public class CleanContactsJob : BackgroundService
 
     private Task CleanContacts()
     {
-        var oldContacts = _antiGaspiContext.ContactOffers
-            .Where(contact => contact.CreationDate < DateTimeOffset.Now.AddDays(-CleanExpirationInDays));
+        using var scope = _serviceScopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AntiGaspiContext>();
+
+        var oldContacts = context.ContactOffers
+            .Where(contact => contact.CreationDate < _dateTimeOffset.Now.AddDays(-CleanExpirationInDays));
 
         foreach (var contact in oldContacts)
         {
-            _antiGaspiContext.Remove(contact);
+            context.Remove(contact);
         }
 
-        return _antiGaspiContext.SaveChangesAsync();
+        return context.SaveChangesAsync();
     }
 }
