@@ -13,6 +13,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace Soat.AntiGaspi.Api.Tests;
 
@@ -26,14 +28,26 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
     public CleanContactsJobTests(ApiWebApplicationFactory webAppFactory)
     {
         _dateTimeOffsetFake = new DateTimeOffsetFake();
-        webAppFactory.Configure(
-            services => services.AddSingleton<IDateTimeOffset>(_dateTimeOffsetFake),
-            configurationBuilder => configurationBuilder.Properties.Add(AppSettingKeys.CleanContactsTimer, "*/10 * * * * *"));
+        
+        _httpClient = webAppFactory
+            .WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureAppConfiguration((_, config) =>
+                {
+                    config.AddInMemoryCollection(
+                        new Dictionary<string, string>
+                        {
+                            [AppSettingKeys.CleanContactsTimer] = "*/10 * * * * *"
+                        });
+                });
 
-        _httpClient = webAppFactory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            BaseAddress = new Uri(ApiWebApplicationFactory.ApiUrl)
-        });
+                builder.ConfigureServices(
+                    services => services.AddSingleton<IDateTimeOffset>(_dateTimeOffsetFake));
+            })
+            .CreateClient(new WebApplicationFactoryClientOptions
+            {
+                BaseAddress = new Uri(ApiWebApplicationFactory.ApiUrl)
+            });
 
         _serviceProvider = webAppFactory.Services;
         _fixture = new Fixture();
