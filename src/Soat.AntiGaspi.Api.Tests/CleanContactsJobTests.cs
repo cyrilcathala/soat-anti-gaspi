@@ -30,13 +30,12 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
             services => services.AddSingleton<IDateTimeOffset>(_dateTimeOffsetFake),
             configurationBuilder => configurationBuilder.Properties.Add(AppSettingKeys.CleanContactsTimer, "*/1 * * * *"));
 
-        _antiGaspiContext = webAppFactory.Services.GetRequiredService<AntiGaspiContext>();
-
         _httpClient = webAppFactory.CreateClient(new WebApplicationFactoryClientOptions
         {
             BaseAddress = new Uri(ApiWebApplicationFactory.ApiUrl)
         });
 
+        _antiGaspiContext = webAppFactory.Services.GetRequiredService<AntiGaspiContext>();
         _fixture = new Fixture();
     }
 
