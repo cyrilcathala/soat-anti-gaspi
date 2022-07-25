@@ -18,8 +18,8 @@ namespace Soat.AntiGaspi.Api.Tests;
 
 public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
 {
-    private readonly AntiGaspiContext _antiGaspiContext;
     private readonly HttpClient _httpClient;
+    private readonly IServiceProvider _serviceProvider;
     private readonly Fixture _fixture;
     private readonly DateTimeOffsetFake _dateTimeOffsetFake;
 
@@ -35,7 +35,7 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
             BaseAddress = new Uri(ApiWebApplicationFactory.ApiUrl)
         });
 
-        _antiGaspiContext = webAppFactory.Services.GetRequiredService<AntiGaspiContext>();
+        _serviceProvider = webAppFactory.Services;
         _fixture = new Fixture();
     }
 
@@ -48,7 +48,9 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
 
         await Task.Delay(TimeSpan.FromMinutes(1));
 
-        var contactOffer = _antiGaspiContext.ContactOffers
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AntiGaspiContext>();
+        var contactOffer = context.ContactOffers
             .Where(contact => contact.OfferId == offerId)
             .FirstOrDefault();
 

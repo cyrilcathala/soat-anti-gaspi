@@ -4,9 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SendGrid;
-using Soat.AntiGaspi.Api.Constants;
-using Soat.AntiGaspi.Api.Tests.Fakes;
-using Soat.AntiGaspi.Api.Time;
 using System;
 
 namespace Soat.AntiGaspi.Api.Tests;
