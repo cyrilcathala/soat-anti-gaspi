@@ -105,6 +105,8 @@ namespace Soat.AntiGaspi.Api.Controllers
             _antiGaspiContext.Add(offer);
             await _antiGaspiContext.SaveChangesAsync();
 
+            await SendOfferEmail(offer);
+
             return CreatedAtAction(nameof(Get), new { id = offer.Id }, offer.Id);
         }
 
@@ -119,7 +121,7 @@ namespace Soat.AntiGaspi.Api.Controllers
 
             offer.Status = OfferStatus.Active;
             await _antiGaspiContext.SaveChangesAsync();
-
+            
             return Ok();
         }
 
@@ -140,7 +142,6 @@ namespace Soat.AntiGaspi.Api.Controllers
             }
         }
 
-
         [HttpPost("{id}/contact")]
         public async Task<IActionResult> Contact(Guid id, [FromBody] ContactRequest contactRequest)
         {
@@ -152,20 +153,34 @@ namespace Soat.AntiGaspi.Api.Controllers
 
             var contactOffer = _mapper.Map<ContactOffer>(contactRequest);
             contactOffer.OfferId = id;
-            
+
             _antiGaspiContext.Add(contactOffer);
             await _antiGaspiContext.SaveChangesAsync();
 
-            var mail = new SendGridMessage
-            {
-                From = new EmailAddress("antigaspi@soat.fr"),
-                Subject = "Coucou toi"
-            };
-            mail.AddContent(MimeType.Html, "<html>Salut en <strong>gras</strong></html>");
-            mail.AddTo(offer.Email);
-            await _sendGridClient.SendEmailAsync(mail);
+            await SendContactEmail(offer);            
 
             return Ok();
+        }
+
+        private Task SendContactEmail(Offer offer) 
+            => SendEmail(offer.Email, "Confirmation de contact", "");
+
+        private Task SendOfferEmail(Offer offer) 
+            => SendEmail(offer.Email, "Confirmation d'offre", "");
+
+        private Task SendEmail(string to, string subject, string body)
+        {
+            var from = "antigaspi@soat.fr";
+
+            var mail = new SendGridMessage
+            {
+                From = new EmailAddress(from),
+                Subject = subject
+            };
+            mail.AddContent(MimeType.Html, body);
+            mail.AddTo(to);
+
+            return _sendGridClient.SendEmailAsync(mail);
         }
     }
 }
