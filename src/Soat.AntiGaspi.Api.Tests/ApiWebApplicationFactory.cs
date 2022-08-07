@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SendGrid;
-using System;
 
 namespace Soat.AntiGaspi.Api.Tests;
 
@@ -24,7 +23,9 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>
         services.AddScoped(s => new Mock<ISendGridClient>().Object);
     }
 
-    private void ConfigureApp(WebHostBuilderContext hostContext, IConfigurationBuilder configurationBuilder)
+    private void ConfigureApp(
+        WebHostBuilderContext hostContext,
+        IConfigurationBuilder configurationBuilder)
     {
     }
 }

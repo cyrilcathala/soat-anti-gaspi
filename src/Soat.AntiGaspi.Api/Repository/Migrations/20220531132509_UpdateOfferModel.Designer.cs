@@ -34,7 +34,7 @@ namespace Soat.AntiGaspi.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("Availability")
+                    b.Property<DateTimeOffset?>("Availability")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CompanyName")
@@ -49,7 +49,7 @@ namespace Soat.AntiGaspi.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("Expiration")
+                    b.Property<DateTimeOffset?>("Expiration")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Status")

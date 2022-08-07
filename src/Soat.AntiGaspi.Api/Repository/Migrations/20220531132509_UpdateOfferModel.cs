@@ -17,7 +17,7 @@ namespace Soat.AntiGaspi.Api.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.AddColumn<DateTime>(
+            migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "Availability",
                 schema: "antigaspi",
                 table: "Offers",
@@ -48,7 +48,7 @@ namespace Soat.AntiGaspi.Api.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.AddColumn<DateTime>(
+            migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "Expiration",
                 schema: "antigaspi",
                 table: "Offers",

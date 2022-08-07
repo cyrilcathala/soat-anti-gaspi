@@ -15,4 +15,6 @@ public class ContactOffer
     public string? Message { get; init; }
 
     public Guid OfferId { get; set; }
+
+    public DateTimeOffset CreationDate { get; init; } = DateTimeOffset.Now;
 }
