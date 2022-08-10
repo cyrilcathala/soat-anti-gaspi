@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Soat.AntiGaspi.Api.Repository;
@@ -11,9 +12,10 @@ using Soat.AntiGaspi.Api.Repository;
 namespace Soat.AntiGaspi.Api.Migrations
 {
     [DbContext(typeof(AntiGaspiContext))]
-    partial class AntiGaspiContextModelSnapshot : ModelSnapshot
+    [Migration("20220810122538_AddCreationDate")]
+    partial class AddCreationDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

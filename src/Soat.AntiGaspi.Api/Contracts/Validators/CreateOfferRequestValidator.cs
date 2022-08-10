@@ -24,13 +24,15 @@ public class CreateOfferRequestValidator : AbstractValidator<CreateOfferRequest>
 
         RuleFor(x => x.Availability)
             .NotNull()
-            .Must(availability => DateTimeOffset.UtcNow.Date <= availability);
+            .Must(availability => DateTimeOffset.UtcNow.Date <= availability)
+            .WithMessage("Availability cannot be in the past.");
 
         RuleFor(x => x.Expiration)
             .NotNull();
 
         RuleFor(x => x)
-            .Must(ExpirationBeforeAvailability);
+            .Must(ExpirationBeforeAvailability)
+            .WithMessage("The offer should expire after the availability date.");
     }
 
     private bool ExpirationBeforeAvailability(CreateOfferRequest offer) 
