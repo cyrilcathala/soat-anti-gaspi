@@ -23,12 +23,8 @@ public class CreateOfferRequestValidator : AbstractValidator<CreateOfferRequest>
             .NotEmpty();
 
         RuleFor(x => x.Availability)
-            .NotNull()
-            .Must(availability => DateOnly.FromDateTime(DateTime.UtcNow) <= availability.GetValueOrDefault())
+            .Must(availability => availability == null || DateOnly.FromDateTime(DateTime.UtcNow) <= availability.GetValueOrDefault())
             .WithMessage("Availability cannot be in the past.");
-
-        RuleFor(x => x.Expiration)
-            .NotNull();
 
         RuleFor(x => x)
             .Must(ExpirationBeforeAvailability)
@@ -36,5 +32,7 @@ public class CreateOfferRequestValidator : AbstractValidator<CreateOfferRequest>
     }
 
     private bool ExpirationBeforeAvailability(CreateOfferRequest offer) 
-        => offer.Availability < offer.Expiration;
+        => offer.Availability == null 
+        || offer.Expiration == null 
+        || offer.Availability < offer.Expiration;
 }
