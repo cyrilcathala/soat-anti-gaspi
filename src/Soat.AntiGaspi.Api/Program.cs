@@ -18,7 +18,7 @@ public class Program
             .AddControllers()
             .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>());
 
-        builder.Services.AddSingleton<IDateTimeOffset, DateTimeOffsetProvider>();
+        builder.Services.AddSingleton<IDateOnly, DateOnlyProvider>();
 
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddEndpointsApiExplorer();

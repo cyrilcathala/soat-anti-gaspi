@@ -10,7 +10,7 @@ public class GetOfferResponse
 
     public string CompanyName { get; init; } = default!;
 
-    public DateTimeOffset? Availability { get; init; }
+    public DateOnly? Availability { get; init; }
 
-    public DateTimeOffset? Expiration { get; init; }
+    public DateOnly? Expiration { get; init; }
 }

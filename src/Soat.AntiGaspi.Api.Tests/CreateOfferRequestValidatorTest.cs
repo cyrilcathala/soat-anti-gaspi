@@ -116,7 +116,7 @@ public class CreateOfferRequestValidatorTest
             .TestValidate(
                 new Contracts.CreateOfferRequest
                 {
-                    Availability = DateTimeOffset.UtcNow.AddDays(-5)
+                    Availability = DateTime.UtcNow.AddDays(-5)
                 })
             .ShouldHaveValidationErrorFor(c => c.Availability);
     }
@@ -138,7 +138,7 @@ public class CreateOfferRequestValidatorTest
     [Trait(nameof(Contracts.CreateOfferRequest), "Error")]
     public void Should_Fail_When_ExpirationIsBeforeAvailability()
     {
-        var availability = DateTimeOffset.UtcNow;
+        var availability = DateTime.UtcNow;
         _validator
             .TestValidate(
                 new Contracts.CreateOfferRequest
@@ -222,7 +222,7 @@ public class CreateOfferRequestValidatorTest
             .TestValidate(
                 new Contracts.CreateOfferRequest
                 {
-                    Availability = DateTimeOffset.UtcNow
+                    Availability = DateTime.UtcNow
                 })
             .ShouldNotHaveValidationErrorFor(c => c.Availability);
     }
@@ -235,7 +235,7 @@ public class CreateOfferRequestValidatorTest
             .TestValidate(
                 new Contracts.CreateOfferRequest
                 {
-                    Expiration = DateTimeOffset.UtcNow
+                    Expiration = DateTime.UtcNow
                 })
             .ShouldNotHaveValidationErrorFor(c => c.Expiration);
     }

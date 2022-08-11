@@ -4,12 +4,35 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Soat.AntiGaspi.Api.Migrations
+namespace Soat.AntiGaspi.Api.Repository.Migrations
 {
-    public partial class ContactOffersCreation : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "antigaspi");
+
+            migrationBuilder.CreateTable(
+                name: "Offers",
+                schema: "antigaspi",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    CompanyName = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: false),
+                    Availability = table.Column<DateOnly>(type: "date", nullable: true),
+                    Expiration = table.Column<DateOnly>(type: "date", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offers", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ContactOffers",
                 schema: "antigaspi",
@@ -22,7 +45,8 @@ namespace Soat.AntiGaspi.Api.Migrations
                     Phone = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: true),
                     Message = table.Column<string>(type: "text", nullable: true),
-                    OfferId = table.Column<Guid>(type: "uuid", nullable: false)
+                    OfferId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,6 +71,10 @@ namespace Soat.AntiGaspi.Api.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ContactOffers",
+                schema: "antigaspi");
+
+            migrationBuilder.DropTable(
+                name: "Offers",
                 schema: "antigaspi");
         }
     }

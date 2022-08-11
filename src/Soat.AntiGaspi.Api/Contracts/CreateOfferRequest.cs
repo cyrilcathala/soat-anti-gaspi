@@ -12,7 +12,7 @@ public class CreateOfferRequest
 
     public string? Address { get; init; }
 
-    public DateTimeOffset? Availability { get; init; }
+    public DateOnly? Availability { get; init; }
 
-    public DateTimeOffset? Expiration { get; init; }
+    public DateOnly? Expiration { get; init; }
 }
