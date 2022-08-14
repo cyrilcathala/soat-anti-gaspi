@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using Soat.AntiGaspi.Api.Constants;
 using Soat.AntiGaspi.Api.Contracts;
 using Soat.AntiGaspi.Api.Contracts.Paging;
 using Soat.AntiGaspi.Api.Models;
@@ -19,6 +20,7 @@ namespace Soat.AntiGaspi.Api.Controllers
         private readonly AntiGaspiContext _antiGaspiContext;
         private readonly IMapper _mapper;
         private readonly ISendGridClient _sendGridClient;
+        private readonly IConfiguration _configuration;
 
         private delegate IOrderedQueryable<TSource> OrderByAscendingOrDescending<TSource, TKey>(IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector);
 
@@ -26,12 +28,14 @@ namespace Soat.AntiGaspi.Api.Controllers
             AntiGaspiContext antiGaspiContext,
             IMapper mapper,
             ISendGridClient sendGridClient,
+            IConfiguration configuration,
             ILogger<OffersController> logger)
         {
             _logger = logger;
             _antiGaspiContext = antiGaspiContext;
             _mapper = mapper;
-            this._sendGridClient = sendGridClient;
+            _sendGridClient = sendGridClient;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -162,11 +166,20 @@ namespace Soat.AntiGaspi.Api.Controllers
             return Ok();
         }
 
-        private Task SendContactEmail(Offer offer) 
-            => SendEmail(offer.Email, "Confirmation de contact", "");
+        private Task SendContactEmail(Offer offer)
+        {
+            return SendEmail(offer.Email, "Confirmation de contact", "");
+        }
 
-        private Task SendOfferEmail(Offer offer) 
-            => SendEmail(offer.Email, "Confirmation d'offre", "");
+        private async Task SendOfferEmail(Offer offer)
+        {
+            var frontUrl = _configuration.GetValue<string>(AppSettingKeys.FrontUrl);
+            var mailTemplate = (await System.IO.File.ReadAllTextAsync(@"MailTemplates/confirm_email.html"))
+                .Replace("{{ConfirmUrl}}", $"{frontUrl}/confirmOffer/{offer.Id}")
+                .Replace("{{DeleteUrl}}", $"{frontUrl}/deleteOffer/{offer.Id}");
+
+            await SendEmail(offer.Email, "Confirmation d'offre", mailTemplate);
+        }
 
         private Task SendEmail(string to, string subject, string body)
         {
