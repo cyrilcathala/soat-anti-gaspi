@@ -161,14 +161,17 @@ namespace Soat.AntiGaspi.Api.Controllers
             _antiGaspiContext.Add(contactOffer);
             await _antiGaspiContext.SaveChangesAsync();
 
-            await SendContactEmail(offer);            
+            await SendContactEmail(offer, contactOffer);            
 
             return Ok();
         }
 
-        private Task SendContactEmail(Offer offer)
+        private Task SendContactEmail(Offer offer, ContactOffer contact)
         {
-            return SendEmail(offer.Email, "Confirmation de contact", "");
+            return SendEmail(offer.Email, "Confirmation de contact", @$"{offer.Title}
+Message envoyé par {contact.FirstName} {contact.LastName}
+Coordonnées : {contact.Email} - {contact.Phone}
+Message : {contact.Message}");
         }
 
         private async Task SendOfferEmail(Offer offer)
@@ -181,7 +184,7 @@ namespace Soat.AntiGaspi.Api.Controllers
             await SendEmail(offer.Email, "Confirmation d'offre", mailTemplate);
         }
 
-        private Task SendEmail(string to, string subject, string body)
+        private async Task<bool> SendEmail(string to, string subject, string body)
         {
             var from = _configuration.GetValue<string>(AppSettingKeys.SendGridMailSender);
             var mail = new SendGridMessage
@@ -192,7 +195,8 @@ namespace Soat.AntiGaspi.Api.Controllers
             mail.AddContent(MimeType.Html, body);
             mail.AddTo(to);
 
-            return _sendGridClient.SendEmailAsync(mail);
+            var response = await _sendGridClient.SendEmailAsync(mail);
+            return response.IsSuccessStatusCode;
         }
     }
 }
