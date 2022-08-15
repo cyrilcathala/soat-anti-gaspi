@@ -183,8 +183,7 @@ namespace Soat.AntiGaspi.Api.Controllers
 
         private Task SendEmail(string to, string subject, string body)
         {
-            var from = "antigaspi@soat.fr";
-
+            var from = _configuration.GetValue<string>(AppSettingKeys.SendGridMailSender);
             var mail = new SendGridMessage
             {
                 From = new EmailAddress(from),
