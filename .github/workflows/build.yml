@@ -58,7 +58,7 @@ jobs:
         WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test -c Release --no-build --verbosity normal
 
     - name: Publish
       run: dotnet publish -c Release --no-build -o out
