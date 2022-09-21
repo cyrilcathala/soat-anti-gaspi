@@ -6,21 +6,26 @@ on:
   pull_request:
     branches: [ master ]
     
+env:
+  AZURE_WEBAPP_NAME: 'app-soat-bc22-dev-fr-01'
+  AZURE_WEBAPP_PACKAGE_PATH: './out'
+
 defaults:
  run:
   working-directory: ./src
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+
     - uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
@@ -28,22 +33,60 @@ jobs:
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
           ${{ runner.os }}-nuget
+
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build -c Release --no-restore
+
     - uses: satackey/action-docker-layer-caching@v0.0.11
       continue-on-error: true
+
     - name: Generate Database Initialisation Script
       run: |
         cd Soat.AntiGaspi.Api
         dotnet tool install --global dotnet-ef
         dotnet ef dbcontext script --no-build --output ../postgres/00_init.sql
+
     - name: Run Docker Compose
       run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+
     - name: Wait for database to be up...
       run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- localhost:5432 -- echo "Database is up"
       env:
         WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
+
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+    - name: Publish
+      run: dotnet publish -c Release --no-build -o out
+      
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: out
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: build
+
+    - name: Deploy to Azure WebApp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    - name: Publish WebApp Package Artifacts
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
