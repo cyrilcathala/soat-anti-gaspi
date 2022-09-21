@@ -45,7 +45,7 @@ jobs:
 
     - name: Generate Database Initialisation Script
       run: |
-        cd Soat.AntiGaspi.Api
+        cd out
         dotnet tool install --global dotnet-ef
         dotnet ef dbcontext script --no-build --output ../postgres/00_init.sql
 
