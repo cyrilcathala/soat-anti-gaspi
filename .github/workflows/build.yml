@@ -45,9 +45,9 @@ jobs:
 
     - name: Generate Database Initialisation Script
       run: |
-        cd out
+        cd Soat.AntiGaspi.Api
         dotnet tool install --global dotnet-ef
-        dotnet ef dbcontext script --no-build --output ../postgres/00_init.sql
+        dotnet ef dbcontext script --no-build -c Release --output ../postgres/00_init.sql
 
     - name: Run Docker Compose
       run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
