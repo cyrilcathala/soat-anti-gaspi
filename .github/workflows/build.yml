@@ -61,13 +61,13 @@ jobs:
       run: dotnet test -c Release --no-build --verbosity normal
 
     - name: Publish
-      run: dotnet publish -c Release --no-build -o ./out
+      run: dotnet publish -c Release --no-build -o out
       
     - name: Archive build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: build
-        path: out
+        path: ./out
 
   deploy:
     runs-on: ubuntu-latest
