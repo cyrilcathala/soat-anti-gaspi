@@ -55,17 +55,17 @@ jobs:
       env:
         WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
 
-    - name: Publish
-      run: dotnet publish -c Release --no-build -o ./out
-
     - name: Test
       run: dotnet test -c Release --no-build --verbosity normal
+
+    - name: Publish
+      run: dotnet publish -c Release --no-build -o ./out
       
     - name: Archive build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: build-artifact
-        path: out
+        path: src/out
 
   deploy:
     runs-on: ubuntu-latest
