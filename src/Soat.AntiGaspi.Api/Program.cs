@@ -20,6 +20,7 @@ public class Program
 
         builder.Services.AddSingleton<IDateTimeOffset, DateTimeOffsetProvider>();
 
+        builder.Services.AddApplicationInsightsTelemetry();
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
