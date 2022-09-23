@@ -8,7 +8,6 @@ on:
     
 env:
   AZURE_WEBAPP_NAME: 'app-soat-bc22-dev-fr-01'
-  AZURE_WEBAPP_PACKAGE_PATH: './out'
 
 defaults:
  run:
@@ -26,7 +25,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
-    - uses: actions/cache@v3
+    - name: Cache NuGet packages
+      uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
         # Look to see if there is a cache hit for the corresponding requirements file
@@ -34,20 +34,18 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget
 
-    - name: Restore dependencies
-      run: dotnet restore
-
     - name: Build
-      run: dotnet build -c Release --no-restore
-
-    - uses: satackey/action-docker-layer-caching@v0.0.11
-      continue-on-error: true
+      run: dotnet build --configuration Release
 
     - name: Generate Database Initialisation Script
       run: |
         cd Soat.AntiGaspi.Api
         dotnet tool install --global dotnet-ef
         dotnet ef dbcontext script --configuration Release --no-build --output ../postgres/00_init.sql
+
+    - name: Cache docker layer
+      uses: satackey/action-docker-layer-caching@v0.0.11
+      continue-on-error: true
 
     - name: Run Docker Compose
       run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
@@ -61,13 +59,13 @@ jobs:
       run: dotnet test -c Release --no-build --verbosity normal
 
     - name: Publish
-      run: dotnet publish -c Release --no-build -o out
+      run: dotnet publish -c Release -o ./out
       
     - name: Archive build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: build-artifact
-        path: out/
+        path: out
 
   deploy:
     runs-on: ubuntu-latest
@@ -78,6 +76,8 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
+    - uses: actions/checkout@v3
+
     - name: Download build artifact
       uses: actions/download-artifact@v3
       with:
@@ -89,10 +89,4 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
-    - name: Publish WebApp Package Artifacts
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        package: '.'
