@@ -43,6 +43,7 @@ jobs:
         cd Soat.AntiGaspi.Api
         dotnet tool install --global dotnet-ef
         dotnet ef dbcontext script --configuration Release --no-build --output ../postgres/00_init.sql
+        dotnet ef migrations script --output ../postgres/init.sql --idempotent
 
     - name: Cache docker layer
       uses: satackey/action-docker-layer-caching@v0.0.11
@@ -67,6 +68,12 @@ jobs:
       with:
         name: build-artifact
         path: src/out
+
+    - name: Archive SQL scripts artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: sql-artifact
+        path: src/postgres
 
   deploy:
     runs-on: ubuntu-latest

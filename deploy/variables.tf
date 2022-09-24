@@ -1,5 +1,5 @@
 variable "name_suffix" {
-  default     = "soatbc22-dev-fr"
+  default     = "soat-bc22-dev-fr"
   description = "Suffix of the resource name."
 }
 
