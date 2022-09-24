@@ -115,7 +115,7 @@ jobs:
 
     - name: Update Azure database
       run: |
-        cd ../src/postgres
+        cd ..
         psql -f ./00_init.sql postgresql://${{ steps.terraform-apply.outputs.user }}:${{ steps.terraform-apply.outputs.password }}@${{ steps.terraform-apply.outputs.potgresql_url }}:5432/${{ steps.terraform-apply.outputs.potgresql_database_name }}
         # dotnet tool install --global dotnet-ef
         # dotnet ef database update --connection ${{ steps.terraform-apply.outputs.potgresql_connection_string }} --project ./Soat.AntiGaspi.Api
