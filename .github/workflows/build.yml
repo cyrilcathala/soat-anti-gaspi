@@ -97,6 +97,8 @@ jobs:
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: false
 
     - name: Terraform Init
       run: terraform init
@@ -106,7 +108,15 @@ jobs:
 
     - name: Terraform Apply
       id: terraform-apply
-      run: terraform apply -input=false -auto-approve
+      run: |
+        terraform apply -auto-approve
+        # Export Terraform output as step output
+        $terraformOutput = (terraform output -json | ConvertFrom-Json -AsHashtable)     
+        foreach ($key in $terraformOutput.Keys) {
+          $outputVariableValue = $terraformOutput[$key].value
+          Write-Output "::set-output name=${key}::${outputVariableValue}"
+        } 
+      shell: pwsh
 
     - name: Download SQL artifacts
       uses: actions/download-artifact@v3
@@ -118,7 +128,7 @@ jobs:
       with:
         server-name: ${{ steps.terraform-apply.outputs.postgresql_name }}
         connection-string: "psql host=${{ steps.terraform-apply.outputs.potgresql_url }} port=5432 user=${{ steps.terraform-apply.outputs.user }} password=${{ steps.terraform-apply.outputs.password }} dbname=${{ steps.terraform-apply.outputs.potgresql_database_name }} sslmode=required"
-        sql-file: './00_init.sql'
+        plsql-file: './00_init.sql'
 
     - name: Download build artifact
       uses: actions/download-artifact@v3
