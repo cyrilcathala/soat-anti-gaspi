@@ -5,6 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
     
 env:
   AZURE_WEBAPP_NAME: 'app-soat-bc22-dev-fr-01'
