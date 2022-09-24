@@ -104,9 +104,6 @@ jobs:
     - name: Terraform Validate
       run: terraform validate
 
-    - name: Terraform Import
-      run: terraform import
-
     - name: Terraform Apply
       id: terraform-apply
       run: terraform apply -input=false -auto-approve
