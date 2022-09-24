@@ -99,12 +99,18 @@ jobs:
       run: terraform validate
 
     - name: Terraform Apply
+      id: terraform-apply
       run: terraform apply -input=false -auto-approve
 
     - name: Download build artifact
       uses: actions/download-artifact@v3
       with:
         name: build-artifact
+
+    - name: Update Azure database      
+      run: |        
+        dotnet tool install --global dotnet-ef
+        dotnet ef database update --connection ${{ steps.terraform-apply.outputs.potgresql_connection_string }}
 
     - name: Deploy to Azure WebApp
       id: deploy-to-webapp

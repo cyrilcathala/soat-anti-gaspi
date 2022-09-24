@@ -73,3 +73,10 @@ resource "azurerm_postgresql_flexible_server_database" "default" {
   collation = "en_US.UTF8"
   charset   = "UTF8"
 }
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "default" {
+  name                = "all"
+  server_id           = azurerm_postgresql_flexible_server.default.id
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
+}
