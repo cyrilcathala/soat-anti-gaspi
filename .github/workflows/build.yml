@@ -41,7 +41,7 @@ jobs:
     - name: Generate Database Initialisation Script
       run: |
         dotnet tool install --global dotnet-ef
-        dotnet ef dbcontext script --no-build --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
+        dotnet ef dbcontext script --configuration Release --no-build --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
         dotnet ef migrations script --configuration Release --no-build --idempotent --startup-project Soat.AntiGaspi.Api --output postgres/init.sql
         # Remove BOM encoding
         # sed -i '1s/^\xEF\xBB\xBF//' postgres/00_init.sql
