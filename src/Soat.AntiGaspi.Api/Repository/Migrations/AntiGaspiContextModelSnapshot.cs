@@ -8,7 +8,7 @@ using Soat.AntiGaspi.Api.Repository;
 
 #nullable disable
 
-namespace Soat.AntiGaspi.Api.Migrations
+namespace Soat.AntiGaspi.Api.Repository.Migrations
 {
     [DbContext(typeof(AntiGaspiContext))]
     partial class AntiGaspiContextModelSnapshot : ModelSnapshot
@@ -29,6 +29,9 @@ namespace Soat.AntiGaspi.Api.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
