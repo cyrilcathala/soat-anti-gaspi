@@ -1,3 +1,8 @@
+variable "SENDGRIDAPIKEY" {
+  type = string
+  sensitive = true
+}
+
 resource "azurerm_resource_group" "default" {
   name     = "rg-${var.name_suffix}"
   location = var.location
@@ -45,6 +50,7 @@ resource "azurerm_windows_web_app" "default" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.default.connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "XDT_MicrosoftApplicationInsights_Mode"      = "recommended"
+    "SendGridApiKey"                             = var.SENDGRIDAPIKEY
   }
 
   connection_string {
