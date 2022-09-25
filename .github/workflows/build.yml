@@ -42,7 +42,7 @@ jobs:
       run: |
         dotnet tool install --global dotnet-ef
         dotnet ef migrations script --configuration Release --no-build --idempotent --no-transactions --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
-        dos2unix postgres/00_init.sql
+        vi -c ":set nobomb" -c ":wq" postgres/00_init.sql 
     
     - name: Archive SQL scripts artifacts
       uses: actions/upload-artifact@v3
