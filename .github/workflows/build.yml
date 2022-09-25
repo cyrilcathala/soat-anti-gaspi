@@ -43,7 +43,7 @@ jobs:
         dotnet tool install --global dotnet-ef
         dotnet ef migrations script --configuration Release --no-build --idempotent --no-transactions --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
         # Remove BOM encoding
-        sed -i '1s/^\xEF\xBB\xBF//' 00_init.sql
+        sed -i '1s/^\xEF\xBB\xBF//' postgres/00_init.sql
     
     - name: Archive SQL scripts artifacts
       uses: actions/upload-artifact@v3
