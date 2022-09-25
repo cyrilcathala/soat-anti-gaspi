@@ -43,6 +43,12 @@ jobs:
         dotnet tool install --global dotnet-ef
         dotnet ef migrations script --configuration Release --no-build --idempotent --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
     
+    - name: Archive SQL scripts artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: sql-artifact
+        path: src/postgres
+    
     - name: Cache docker layer
       uses: satackey/action-docker-layer-caching@v0.0.11
       continue-on-error: true
@@ -61,12 +67,6 @@ jobs:
     - name: Publish
       run: dotnet publish -c Release --no-build -o ./out    
     
-    - name: Archive SQL scripts artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: sql-artifact
-        path: src/postgres
-
     - name: Archive build artifacts
       uses: actions/upload-artifact@v3
       with:
