@@ -60,12 +60,14 @@ jobs:
     - name: Run Docker Compose
       run: |
         docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
-        docker logs src-postgres-1 --tail 1000
 
     - name: Wait for database to be up...
       run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- localhost:5432 -- echo "Database is up"
       env:
         WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
+
+    - name: Docker logs
+      run: docker compose logs --tail 1000
 
     - name: Test
       run: dotnet test -c Release --no-build --verbosity normal
