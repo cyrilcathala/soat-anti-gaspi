@@ -104,7 +104,7 @@ jobs:
 
     - name: Terraform Apply
       id: terraform-apply
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -var='SendGridApiKey=${{ secrets.SENDGRIDAPIKEY }}'
         
     - name: Terraform Outputs
       id: terraform-outputs
