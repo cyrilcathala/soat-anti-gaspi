@@ -41,15 +41,8 @@ jobs:
     - name: Generate Database Initialisation Script
       run: |
         dotnet tool install --global dotnet-ef
-        # dotnet ef dbcontext script --configuration Release --no-build --output ../postgres/00_init.sql
-        dotnet ef migrations script --idempotent --startup-project Soat.AntiGaspi.Api --output ../postgres/00_init.sql
+        dotnet ef migrations script --idempotent --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
     
-    - name: Archive SQL scripts artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: sql-artifact
-        path: src/postgres
-
     - name: Cache docker layer
       uses: satackey/action-docker-layer-caching@v0.0.11
       continue-on-error: true
@@ -66,8 +59,14 @@ jobs:
       run: dotnet test -c Release --no-build --verbosity normal
 
     - name: Publish
-      run: dotnet publish -c Release --no-build -o ./out
-      
+      run: dotnet publish -c Release --no-build -o ./out    
+    
+    - name: Archive SQL scripts artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: sql-artifact
+        path: src/postgres
+
     - name: Archive build artifacts
       uses: actions/upload-artifact@v3
       with:
