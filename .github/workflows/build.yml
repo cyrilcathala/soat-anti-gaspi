@@ -132,7 +132,7 @@ jobs:
       with:
         server-name: ${{ steps.terraform-outputs.outputs.postgresql_name }}
         connection-string: "psql \"host=${{ steps.terraform-outputs.outputs.postgresql_url }} port=5432 user=${{ steps.terraform-outputs.outputs.postgresql_user }} password=${{ steps.terraform-outputs.outputs.postgresql_password }} dbname=${{ steps.terraform-outputs.outputs.postgresql_database_name }} sslmode=require\""
-        plsql-file: 'sql/init.sql'
+        plsql-file: 'sql/00_init.sql'
 
     - name: Download build artifact
       uses: actions/download-artifact@v3
