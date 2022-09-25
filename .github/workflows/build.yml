@@ -46,8 +46,6 @@ jobs:
         # Remove BOM encoding
         # sed -i '1s/^\xEF\xBB\xBF//' postgres/00_init.sql
         # iconv -f UTF-8 -t US-ASCII postgres/00_init.sql > postgres/00_init.sql
-        sudo apt install dos2unix
-        dos2unix postgres/00_init.sql
     
     - name: Archive SQL scripts artifacts
       uses: actions/upload-artifact@v3
@@ -60,7 +58,9 @@ jobs:
       continue-on-error: true
 
     - name: Run Docker Compose
-      run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+      run: |
+        docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+        docker logs src-postgres-1 --tail 1000
 
     - name: Wait for database to be up...
       run: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for | sh -s -- localhost:5432 -- echo "Database is up"
