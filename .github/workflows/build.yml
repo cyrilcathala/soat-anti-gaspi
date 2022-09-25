@@ -41,7 +41,7 @@ jobs:
     - name: Generate Database Initialisation Script
       run: |
         dotnet tool install --global dotnet-ef
-        dotnet ef migrations script --configuration Release --no-build --idempotent --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
+        dotnet ef migrations script --configuration Release --no-build --idempotent --no-transactions --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
     
     - name: Archive SQL scripts artifacts
       uses: actions/upload-artifact@v3
