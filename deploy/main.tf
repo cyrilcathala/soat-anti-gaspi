@@ -48,7 +48,7 @@ resource "azurerm_windows_web_app" "default" {
   }
 
   connection_string {
-    name  = "AntiGaspiContext"
+    name  = "AntiGaspi"
     type  = "PostgreSQL"
     value = "Server=${azurerm_postgresql_flexible_server.default.name}.postgres.database.azure.com;Database=${azurerm_postgresql_flexible_server_database.default.name};Username=${azurerm_postgresql_flexible_server.default.administrator_login};Password=${azurerm_postgresql_flexible_server.default.administrator_password}"
   }

@@ -29,7 +29,7 @@ public class Program
         builder.Services.AddHostedService<CleanContactsJob>();
 
         builder.Services.AddDbContext<AntiGaspiContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("AntiGaspiContext")));
+            options.UseNpgsql(builder.Configuration["POSTGRESQLCONNSTR_AntiGaspi"]));
 
         var app = builder.Build();
 
