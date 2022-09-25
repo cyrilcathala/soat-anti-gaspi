@@ -7,9 +7,6 @@ on:
     branches: [ master ]
   workflow_dispatch:
     
-env:
-  AZURE_WEBAPP_NAME: 'app-soat-bc22-dev-fr-01'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -147,6 +144,6 @@ jobs:
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        app-name: ${{ steps.terraform-outputs.outputs.web_app_name }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: './build'

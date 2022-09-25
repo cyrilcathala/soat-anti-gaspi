@@ -2,6 +2,10 @@ output "resource_group_name" {
   value = azurerm_resource_group.default.name
 }
 
+output "web_app_name" {
+  value = azurerm_windows_web_app.default.name
+}
+
 output "postgresql_name" {
   value = azurerm_postgresql_flexible_server.default.name
 }
