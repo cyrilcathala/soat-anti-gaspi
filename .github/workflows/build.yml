@@ -42,7 +42,7 @@ jobs:
       run: |
         cd Soat.AntiGaspi.Api
         dotnet tool install --global dotnet-ef
-        dotnet ef dbcontext script --configuration Release --no-build --output ../postgres/00_init.sql
+        dotnet ef migrations script --idempotent --output ../postgres/00_init.sql
 
     - name: Cache docker layer
       uses: satackey/action-docker-layer-caching@v0.0.11
