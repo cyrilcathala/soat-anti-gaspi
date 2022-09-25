@@ -41,11 +41,12 @@ jobs:
     - name: Generate Database Initialisation Script
       run: |
         dotnet tool install --global dotnet-ef
-        dotnet ef dbcontext script --configuration Release --no-build --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
-        # dotnet ef migrations script --configuration Release --no-build --idempotent --startup-project Soat.AntiGaspi.Api --output postgres/init.sql
+        # dotnet ef dbcontext script --configuration Release --no-build --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
+        dotnet ef migrations script --configuration Release --no-build --idempotent --startup-project Soat.AntiGaspi.Api --output postgres/00_init.sql
         # Remove BOM encoding
         # sed -i '1s/^\xEF\xBB\xBF//' postgres/00_init.sql
         # iconv -f UTF-8 -t US-ASCII postgres/00_init.sql > postgres/00_init.sql
+        vi -c ":set nobomb" -c ":wq" postgres/00_init.sql
     
     - name: Archive SQL scripts artifacts
       uses: actions/upload-artifact@v3
