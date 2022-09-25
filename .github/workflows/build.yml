@@ -127,7 +127,7 @@ jobs:
       uses: azure/postgresql@v1
       with:
         server-name: ${{ steps.terraform-apply.outputs.postgresql_name }}
-        connection-string: "psql host=${{ steps.terraform-apply.outputs.potgresql_url }} port=5432 user=${{ steps.terraform-apply.outputs.user }} password=${{ steps.terraform-apply.outputs.password }} dbname=${{ steps.terraform-apply.outputs.potgresql_database_name }} sslmode=required"
+        connection-string: "psql host=${{ steps.terraform-apply.outputs.potgresql_url }} port=5432 user=${{ steps.terraform-apply.outputs.postgresql_user }} password=${{ steps.terraform-apply.outputs.postgresql_password }} dbname=${{ steps.terraform-apply.outputs.postgresql_database_name }} sslmode=required"
         plsql-file: './00_init.sql'
 
     - name: Download build artifact
