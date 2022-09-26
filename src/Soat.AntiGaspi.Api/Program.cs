@@ -28,6 +28,7 @@ public class Program
 
         builder.Services.AddHostedService<CleanContactsJob>();
 
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         builder.Services.AddDbContext<AntiGaspiContext>(options =>
             options.UseNpgsql(builder.Configuration["POSTGRESQLCONNSTR_AntiGaspi"]));
 
