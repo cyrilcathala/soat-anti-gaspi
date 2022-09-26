@@ -39,6 +39,9 @@ resource "azurerm_windows_web_app" "default" {
 
   site_config {
     always_on        = false
+    cors {
+      allowed_origins = ["*"]
+    }
     application_stack {
       current_stack  = "dotnet"
       dotnet_version = "v6.0"
