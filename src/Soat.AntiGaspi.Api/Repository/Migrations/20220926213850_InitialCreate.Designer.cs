@@ -12,8 +12,8 @@ using Soat.AntiGaspi.Api.Repository;
 namespace Soat.AntiGaspi.Api.Repository.Migrations
 {
     [DbContext(typeof(AntiGaspiContext))]
-    [Migration("20220810162923_Initial")]
-    partial class Initial
+    [Migration("20220926213850_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

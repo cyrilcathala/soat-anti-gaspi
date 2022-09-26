@@ -25,6 +25,7 @@ public class Program
 
         builder.Services.AddSingleton<IDateOnly, DateOnlyProvider>();
 
+        builder.Services.AddApplicationInsightsTelemetry();
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -33,7 +34,7 @@ public class Program
         builder.Services.AddHostedService<CleanContactsJob>();
 
         builder.Services.AddDbContext<AntiGaspiContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("AntiGaspiContext")));
+            options.UseNpgsql(builder.Configuration["POSTGRESQLCONNSTR_AntiGaspi"]));
 
         builder.Services.AddCors(options =>
         {
@@ -48,10 +49,11 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseSwagger();
+        app.UseSwaggerUI();
+
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
             app.UseCors("dev");
         }
 

@@ -55,8 +55,8 @@ namespace Soat.AntiGaspi.Api.Tests
             var createOfferRequest = _fixture.Build<CreateOfferRequest>()
                 .With(c => c.Title, expectedTitle)
                 .With(c => c.Email, "toto@toto.fr")
-                .With(c => c.Availability, DateTime.UtcNow)
-                .With(c => c.Expiration, DateTime.UtcNow.AddDays(42))
+                .With(c => c.Availability, DateOnly.FromDateTime(DateTime.UtcNow))
+                .With(c => c.Expiration, DateOnly.FromDateTime(DateTime.UtcNow.AddDays(42)))
                 .Create();
 
             var createOfferResponse = await _httpClient.PostAsync("/api/offers", createOfferRequest);
@@ -128,8 +128,8 @@ namespace Soat.AntiGaspi.Api.Tests
             var createOfferRequest = _fixture
                 .Build<CreateOfferRequest>()
                 .With(c => c.Email, "toto@toto.fr")
-                .With(c => c.Availability, DateTime.UtcNow)
-                .With(c => c.Expiration, DateTime.UtcNow.AddDays(42))
+                .With(c => c.Availability, DateOnly.FromDateTime(DateTime.UtcNow))
+                .With(c => c.Expiration, DateOnly.FromDateTime(DateTime.UtcNow.AddDays(42)))
                 .Create();
 
             var createOfferResponse = await _httpClient.PostAsync("/api/offers", createOfferRequest);
