@@ -2,6 +2,6 @@
 {
     public interface IDateOnly
     {
-        DateOnly Now { get; }
+        DateTime Now { get; }
     }
 }

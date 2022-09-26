@@ -14,9 +14,9 @@
 
         public string Address { get; set; } = default!;
 
-        public DateOnly? Availability { get; set; }
+        public DateTime? Availability { get; set; }
 
-        public DateOnly? Expiration { get; set; }
+        public DateTime? Expiration { get; set; }
 
         public OfferStatus Status { get; set; }
     }    

@@ -24,8 +24,8 @@ namespace Soat.AntiGaspi.Api.Repository.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     CompanyName = table.Column<string>(type: "text", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: false),
-                    Availability = table.Column<DateOnly>(type: "date", nullable: true),
-                    Expiration = table.Column<DateOnly>(type: "date", nullable: true),
+                    Availability = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

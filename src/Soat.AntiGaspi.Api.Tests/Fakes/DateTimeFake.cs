@@ -5,10 +5,10 @@ namespace Soat.AntiGaspi.Api.Tests.Fakes
 {
     public class DateOnlyFake : IDateOnly
     {
-        private DateOnly? _now;
-        public DateOnly Now 
+        private DateTime? _now;
+        public DateTime Now 
         {
-            get => _now ?? DateOnly.FromDateTime(DateTime.UtcNow);
+            get => _now ?? DateTime.UtcNow;
             set => _now = value;
         }
     }

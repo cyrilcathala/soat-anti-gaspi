@@ -50,7 +50,7 @@ public class CleanContactsJob : BackgroundService
         var context = scope.ServiceProvider.GetRequiredService<AntiGaspiContext>();
 
         var oldContacts = context.ContactOffers
-            .Where(contact => contact.CreationDate < _dateTime.Now.AddDays(-CleanExpirationInDays).ToDateTime(TimeOnly.Parse("00:00 AM")));
+            .Where(contact => contact.CreationDate < _dateTime.Now.AddDays(-CleanExpirationInDays));
 
         foreach (var contact in oldContacts)
         {

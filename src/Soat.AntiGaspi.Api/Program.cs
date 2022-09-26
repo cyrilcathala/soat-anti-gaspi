@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using SendGrid.Extensions.DependencyInjection;
 using Soat.AntiGaspi.Api.BackgroundJobs;
 using Soat.AntiGaspi.Api.Constants;
-using Soat.AntiGaspi.Api.Contracts.Converters;
 using Soat.AntiGaspi.Api.Repository;
 using Soat.AntiGaspi.Api.Time;
 
@@ -17,11 +16,7 @@ public class Program
 
         builder.Services
             .AddControllers()
-            .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>())
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new DateOnlyConverter());
-            }); ;
+            .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>());
 
         builder.Services.AddSingleton<IDateOnly, DateOnlyProvider>();
 

@@ -23,7 +23,7 @@ public class CreateOfferRequestValidator : AbstractValidator<CreateOfferRequest>
             .NotEmpty();
 
         RuleFor(x => x.Availability)
-            .Must(availability => availability == null || DateOnly.FromDateTime(DateTime.UtcNow) <= availability.GetValueOrDefault())
+            .Must(availability => availability == null || DateTime.UtcNow <= availability.GetValueOrDefault())
             .WithMessage("Availability cannot be in the past.");
 
         RuleFor(x => x)

@@ -58,7 +58,7 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
     public async Task Should_CleanContacts_When_OlderThan30Days()
     {
         var offerId = await CreateContact();
-        _dateTimeFake.Now = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(35));
+        _dateTimeFake.Now = DateTime.UtcNow.AddDays(35);
 
         await Task.Delay(TimeSpan.FromSeconds(30));
 
@@ -76,8 +76,8 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
         var createOfferRequest = _fixture
             .Build<CreateOfferRequest>()
             .With(c => c.Email, "toto@toto.fr")
-            .With(c => c.Availability, DateOnly.FromDateTime(DateTime.UtcNow))
-            .With(c => c.Expiration, DateOnly.FromDateTime(DateTime.UtcNow.AddDays(42)))
+            .With(c => c.Availability, DateTime.UtcNow.AddDays(1))
+            .With(c => c.Expiration, DateTime.UtcNow.AddDays(42))
             .Create();
 
         var createOfferResponse = await _httpClient.PostAsync("/api/offers", createOfferRequest);
