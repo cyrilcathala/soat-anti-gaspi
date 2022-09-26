@@ -20,6 +20,7 @@ public class Program
 
         builder.Services.AddSingleton<IDateTimeOffset, DateTimeOffsetProvider>();
 
+        builder.Services.AddApplicationInsightsTelemetry();
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -28,15 +29,12 @@ public class Program
         builder.Services.AddHostedService<CleanContactsJob>();
 
         builder.Services.AddDbContext<AntiGaspiContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("AntiGaspiContext")));
+            options.UseNpgsql(builder.Configuration["POSTGRESQLCONNSTR_AntiGaspi"]));
 
         var app = builder.Build();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
 
