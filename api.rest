@@ -1,0 +1,48 @@
+@baseUrl = https://localhost:7201/api
+
+###
+
+GET {{baseUrl}}/offers HTTP/1.1
+
+###
+
+# @name createOffer
+POST {{baseUrl}}/offers HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Annonce de test",
+  "description": "Fauteuil de bureau à disposition, premier arrivé premier servi",
+  "email": "cyril.cathala@soat.fr",
+  "companyName": "SOAT",
+  "address": "20 rue des frigos 75013 Paris",
+  "availability": "2022-10-30T00:00:00.000Z",
+  "expiration": "2022-12-30T00:00:00.000Z"
+}
+
+###
+
+@offerId = {{createOffer.response.body.$}}
+
+POST {{baseUrl}}/offers/{{offerId}}/confirm HTTP/1.1
+
+###
+
+GET {{baseUrl}}/offers/{{offerId}} HTTP/1.1
+
+### 
+
+POST {{baseUrl}}/offers/{{offerId}}/contact HTTP/1.1
+content-type: application/json
+
+{
+  "firstName": "Cyril",
+  "lastName": "Cathala",
+  "phone": "0666666666",
+  "email": "cyril.cathala@soat.fr",
+  "message": "Je suis très intéressé par le fauteuil, peut-on convenir d'un rendez-vous ? Merci d'avance."
+}
+
+###
+
+DELETE {{baseUrl}}/offers/{{offerId}} HTTP/1.1

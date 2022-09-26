@@ -16,5 +16,5 @@ public class ContactOffer
 
     public Guid OfferId { get; set; }
 
-    public DateTimeOffset CreationDate { get; init; } = DateTimeOffset.Now;
+    public DateTime CreationDate { get; init; } = DateTime.UtcNow;
 }

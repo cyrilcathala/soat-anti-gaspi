@@ -24,8 +24,8 @@ namespace Soat.AntiGaspi.Api.Repository.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     CompanyName = table.Column<string>(type: "text", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: false),
-                    Availability = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    Expiration = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    Availability = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -46,7 +46,7 @@ namespace Soat.AntiGaspi.Api.Repository.Migrations
                     Email = table.Column<string>(type: "text", nullable: true),
                     Message = table.Column<string>(type: "text", nullable: true),
                     OfferId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

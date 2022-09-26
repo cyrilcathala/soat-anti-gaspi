@@ -12,7 +12,7 @@ using Soat.AntiGaspi.Api.Repository;
 namespace Soat.AntiGaspi.Api.Repository.Migrations
 {
     [DbContext(typeof(AntiGaspiContext))]
-    [Migration("20220925205829_InitialCreate")]
+    [Migration("20220926215037_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,7 @@ namespace Soat.AntiGaspi.Api.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -72,7 +72,7 @@ namespace Soat.AntiGaspi.Api.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset?>("Availability")
+                    b.Property<DateTime?>("Availability")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CompanyName")
@@ -87,7 +87,7 @@ namespace Soat.AntiGaspi.Api.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset?>("Expiration")
+                    b.Property<DateTime?>("Expiration")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Status")

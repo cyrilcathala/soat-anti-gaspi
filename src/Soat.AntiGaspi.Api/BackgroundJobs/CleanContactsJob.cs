@@ -10,18 +10,18 @@ public class CleanContactsJob : BackgroundService
     private const int CleanExpirationInDays = 30;
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly IDateTimeOffset _dateTimeOffset;
+    private readonly IDateOnly _dateTime;
     private readonly ILogger<CleanContactsJob> _logger;
     private readonly string _cleanContactsTimer;
 
     public CleanContactsJob(
         IServiceScopeFactory serviceScopeFactory,        
         IConfiguration configuration,
-        IDateTimeOffset dateTimeOffset,
+        IDateOnly dateTime,
         ILogger<CleanContactsJob> logger)
     {
         _serviceScopeFactory = serviceScopeFactory;
-        _dateTimeOffset = dateTimeOffset;
+        _dateTime = dateTime;
         _logger = logger;
         _cleanContactsTimer = configuration.GetValue<string>(AppSettingKeys.CleanContactsTimer);
     }
@@ -50,7 +50,7 @@ public class CleanContactsJob : BackgroundService
         var context = scope.ServiceProvider.GetRequiredService<AntiGaspiContext>();
 
         var oldContacts = context.ContactOffers
-            .Where(contact => contact.CreationDate < _dateTimeOffset.Now.AddDays(-CleanExpirationInDays));
+            .Where(contact => contact.CreationDate < _dateTime.Now.AddDays(-CleanExpirationInDays));
 
         foreach (var contact in oldContacts)
         {

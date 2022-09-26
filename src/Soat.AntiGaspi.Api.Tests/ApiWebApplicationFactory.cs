@@ -4,6 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SendGrid;
+using SendGrid.Helpers.Mail;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
 
 namespace Soat.AntiGaspi.Api.Tests;
 
@@ -20,7 +24,12 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>
 
     private void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped(s => new Mock<ISendGridClient>().Object);
+        var sendGridMock = new Mock<ISendGridClient>();
+        sendGridMock
+            .Setup(s => s.SendEmailAsync(It.IsAny<SendGridMessage>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new Response(HttpStatusCode.Accepted, new StringContent("Mock"), null));
+
+        services.AddScoped(s => sendGridMock.Object);
     }
 
     private void ConfigureApp(

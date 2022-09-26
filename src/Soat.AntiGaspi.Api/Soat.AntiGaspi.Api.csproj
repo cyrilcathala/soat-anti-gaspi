@@ -30,4 +30,10 @@
 		<InternalsVisibleTo Include="Soat.AntiGaspi.Api.Tests" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="MailTemplates\confirm_email.html">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

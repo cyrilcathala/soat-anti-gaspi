@@ -23,11 +23,11 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
     private readonly HttpClient _httpClient;
     private readonly IServiceProvider _serviceProvider;
     private readonly Fixture _fixture;
-    private readonly DateTimeOffsetFake _dateTimeOffsetFake;
+    private readonly DateOnlyFake _dateTimeFake;
 
     public CleanContactsJobTests(ApiWebApplicationFactory webAppFactory)
     {
-        _dateTimeOffsetFake = new DateTimeOffsetFake();
+        _dateTimeFake = new DateOnlyFake();
         
         _httpClient = webAppFactory
             .WithWebHostBuilder(builder =>
@@ -42,7 +42,7 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
                 });
 
                 builder.ConfigureServices(
-                    services => services.AddSingleton<IDateTimeOffset>(_dateTimeOffsetFake));
+                    services => services.AddSingleton<IDateOnly>(_dateTimeFake));
             })
             .CreateClient(new WebApplicationFactoryClientOptions
             {
@@ -58,7 +58,7 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
     public async Task Should_CleanContacts_When_OlderThan30Days()
     {
         var offerId = await CreateContact();
-        _dateTimeOffsetFake.Now = DateTimeOffset.UtcNow.AddDays(35);
+        _dateTimeFake.Now = DateTime.UtcNow.AddDays(35);
 
         await Task.Delay(TimeSpan.FromSeconds(30));
 
@@ -76,8 +76,8 @@ public class CleanContactsJobTests : IClassFixture<ApiWebApplicationFactory>
         var createOfferRequest = _fixture
             .Build<CreateOfferRequest>()
             .With(c => c.Email, "toto@toto.fr")
-            .With(c => c.Availability, DateTimeOffset.UtcNow)
-            .With(c => c.Expiration, DateTimeOffset.UtcNow.AddDays(42))
+            .With(c => c.Availability, DateTime.UtcNow.AddDays(1))
+            .With(c => c.Expiration, DateTime.UtcNow.AddDays(42))
             .Create();
 
         var createOfferResponse = await _httpClient.PostAsync("/api/offers", createOfferRequest);

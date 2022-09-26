@@ -18,7 +18,7 @@ public class Program
             .AddControllers()
             .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>());
 
-        builder.Services.AddSingleton<IDateTimeOffset, DateTimeOffsetProvider>();
+        builder.Services.AddSingleton<IDateOnly, DateOnlyProvider>();
 
         builder.Services.AddApplicationInsightsTelemetry();
         builder.Services.AddAutoMapper(typeof(Program));
@@ -31,10 +31,26 @@ public class Program
         builder.Services.AddDbContext<AntiGaspiContext>(options =>
             options.UseNpgsql(builder.Configuration["POSTGRESQLCONNSTR_AntiGaspi"]));
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("dev", builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
+
         var app = builder.Build();
 
         app.UseSwagger();
         app.UseSwaggerUI();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseCors("dev");
+        }
 
         app.UseHttpsRedirection();
 
