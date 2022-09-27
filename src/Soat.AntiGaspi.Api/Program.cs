@@ -1,12 +1,10 @@
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Converters;
 using SendGrid.Extensions.DependencyInjection;
 using Soat.AntiGaspi.Api.BackgroundJobs;
 using Soat.AntiGaspi.Api.Constants;
 using Soat.AntiGaspi.Api.Repository;
 using Soat.AntiGaspi.Api.Time;
-using System.Globalization;
 
 namespace Soat.AntiGaspi.Api;
 
