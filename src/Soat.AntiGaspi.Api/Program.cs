@@ -1,10 +1,12 @@
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
 using SendGrid.Extensions.DependencyInjection;
 using Soat.AntiGaspi.Api.BackgroundJobs;
 using Soat.AntiGaspi.Api.Constants;
 using Soat.AntiGaspi.Api.Repository;
 using Soat.AntiGaspi.Api.Time;
+using System.Globalization;
 
 namespace Soat.AntiGaspi.Api;
 
@@ -16,7 +18,11 @@ public class Program
 
         builder.Services
             .AddControllers()
-            .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>());
+            .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>())
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            });
 
         builder.Services.AddSingleton<IDateOnly, DateOnlyProvider>();
 
@@ -28,7 +34,6 @@ public class Program
 
         builder.Services.AddHostedService<CleanContactsJob>();
 
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         builder.Services.AddDbContext<AntiGaspiContext>(options =>
             options.UseNpgsql(builder.Configuration["POSTGRESQLCONNSTR_AntiGaspi"]));
 
