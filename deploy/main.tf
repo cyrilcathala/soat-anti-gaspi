@@ -54,6 +54,7 @@ resource "azurerm_windows_web_app" "default" {
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "XDT_MicrosoftApplicationInsights_Mode"      = "recommended"
     "SendGridApiKey"                             = var.SendGridApiKey
+    "FrontUrl"                                   = "https://app-soat-bc22-front-dev-fr.azurewebsites.net/"
   }
 
   connection_string {
@@ -74,6 +75,12 @@ resource "azurerm_postgresql_flexible_server" "default" {
   storage_mb             = 32768
   sku_name               = "B_Standard_B1ms"
   backup_retention_days  = 7
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "example" {
+  name      = "client_min_messages"
+  server_id = azurerm_postgresql_flexible_server.default.id
+  value     = "WARNING"
 }
 
 resource "azurerm_postgresql_flexible_server_database" "default" {
