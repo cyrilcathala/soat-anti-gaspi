@@ -32,8 +32,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Constants\" />
-	  <Folder Include="Repository\Migrations\" />
+	  <None Update="MailTemplates\confirm_email.html">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>
