@@ -53,6 +53,7 @@ resource "azurerm_windows_web_app" "default" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.default.connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "XDT_MicrosoftApplicationInsights_Mode"      = "recommended"
+    "SendGridMailSender"                         = "cyril.cathala@soat.fr"
     "SendGridApiKey"                             = var.SendGridApiKey
     "FrontUrl"                                   = "https://app-soat-bc22-front-dev-fr.azurewebsites.net/"
   }
