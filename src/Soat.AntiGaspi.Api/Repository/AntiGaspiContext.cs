@@ -8,7 +8,6 @@ namespace Soat.AntiGaspi.Api.Repository
     {
         public const string DefaultSchema = "antigaspi";
         public DbSet<Offer> Offers { get; set; }
-        public DbSet<ContactOffer> ContactOffers { get; set; }
 
         public AntiGaspiContext()
         {
@@ -21,7 +20,6 @@ namespace Soat.AntiGaspi.Api.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new OffersTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new ContactOffersTypeConfiguration());
         }
     }
 }

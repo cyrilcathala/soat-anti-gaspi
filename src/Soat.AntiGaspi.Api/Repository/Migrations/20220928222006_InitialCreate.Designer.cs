@@ -12,55 +12,17 @@ using Soat.AntiGaspi.Api.Repository;
 namespace Soat.AntiGaspi.Api.Repository.Migrations
 {
     [DbContext(typeof(AntiGaspiContext))]
-    [Migration("20220926215037_InitialCreate")]
+    [Migration("20220928222006_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Soat.AntiGaspi.Api.Models.ContactOffer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("OfferId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OfferId");
-
-                    b.ToTable("ContactOffers", "antigaspi");
-                });
 
             modelBuilder.Entity("Soat.AntiGaspi.Api.Models.Offer", b =>
                 {
@@ -100,15 +62,6 @@ namespace Soat.AntiGaspi.Api.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Offers", "antigaspi");
-                });
-
-            modelBuilder.Entity("Soat.AntiGaspi.Api.Models.ContactOffer", b =>
-                {
-                    b.HasOne("Soat.AntiGaspi.Api.Models.Offer", null)
-                        .WithMany()
-                        .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

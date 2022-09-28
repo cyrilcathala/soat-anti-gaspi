@@ -8,7 +8,6 @@ public class OfferAutoMapperProfile : Profile
     public OfferAutoMapperProfile()
     {
         CreateMap<CreateOfferRequest, Offer>();
-
         CreateMap<Offer, GetOfferResponse>();
     }
 }
