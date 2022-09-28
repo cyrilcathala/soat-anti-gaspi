@@ -16,7 +16,11 @@ public class Program
 
         builder.Services
             .AddControllers()
-            .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>());
+            .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>())
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            });
 
         builder.Services.AddSingleton<IDateOnly, DateOnlyProvider>();
 

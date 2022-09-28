@@ -39,6 +39,9 @@ resource "azurerm_windows_web_app" "default" {
 
   site_config {
     always_on        = false
+    cors {
+      allowed_origins = ["*"]
+    }
     application_stack {
       current_stack  = "dotnet"
       dotnet_version = "v6.0"
@@ -50,7 +53,9 @@ resource "azurerm_windows_web_app" "default" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.default.connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "XDT_MicrosoftApplicationInsights_Mode"      = "recommended"
+    "SendGridMailSender"                         = "cyril.cathala@soat.fr"
     "SendGridApiKey"                             = var.SendGridApiKey
+    "FrontUrl"                                   = "https://app-soat-bc22-front-dev-fr.azurewebsites.net/"
   }
 
   connection_string {
@@ -71,6 +76,12 @@ resource "azurerm_postgresql_flexible_server" "default" {
   storage_mb             = 32768
   sku_name               = "B_Standard_B1ms"
   backup_retention_days  = 7
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "example" {
+  name      = "client_min_messages"
+  server_id = azurerm_postgresql_flexible_server.default.id
+  value     = "WARNING"
 }
 
 resource "azurerm_postgresql_flexible_server_database" "default" {

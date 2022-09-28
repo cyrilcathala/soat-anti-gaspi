@@ -196,6 +196,12 @@ Message : {contact.Message}");
             mail.AddTo(to);
 
             var response = await _sendGridClient.SendEmailAsync(mail);
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Body.ReadAsStringAsync();
+                _logger.LogInformation("Could not send an email - Response: {StatusCode} - {Content}", response.StatusCode, content);
+            }
+
             return response.IsSuccessStatusCode;
         }
     }
