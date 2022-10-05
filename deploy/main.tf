@@ -1,44 +1,39 @@
 variable "SendGridApiKey" {
-  type = string
+  type      = string
   sensitive = true
-}
-
-resource "azurerm_resource_group" "default" {
-  name     = "rg-${var.name_suffix}"
-  location = var.location
 }
 
 resource "azurerm_log_analytics_workspace" "default" {
   name                = "log-${var.name_suffix}"
-  resource_group_name = azurerm_resource_group.default.name
-  location            = azurerm_resource_group.default.location
+  resource_group_name = local.resource_group_name
+  location            = var.location
 }
 
 resource "azurerm_application_insights" "default" {
 
   name                = "appi-${var.name_suffix}"
-  location            = azurerm_resource_group.default.location
-  resource_group_name = azurerm_resource_group.default.name
+  resource_group_name = local.resource_group_name
+  location            = var.location
   workspace_id        = azurerm_log_analytics_workspace.default.id
   application_type    = "web"
 }
 
 resource "azurerm_service_plan" "default" {
   name                = "plan-${var.name_suffix}"
-  location            = azurerm_resource_group.default.location
-  resource_group_name = azurerm_resource_group.default.name
+  resource_group_name = local.resource_group_name
+  location            = var.location
   os_type             = "Windows"
   sku_name            = "F1"
 }
 
 resource "azurerm_windows_web_app" "default" {
   name                = "app-${var.name_suffix}"
-  location            = azurerm_resource_group.default.location
-  resource_group_name = azurerm_resource_group.default.name
+  resource_group_name = local.resource_group_name
+  location            = var.location
   service_plan_id     = azurerm_service_plan.default.id
 
   site_config {
-    always_on        = false
+    always_on = false
     cors {
       allowed_origins = ["*"]
     }
@@ -67,8 +62,8 @@ resource "azurerm_windows_web_app" "default" {
 
 resource "azurerm_postgresql_flexible_server" "default" {
   name                   = "psql-${var.name_suffix}"
-  resource_group_name    = azurerm_resource_group.default.name
-  location               = azurerm_resource_group.default.location
+  resource_group_name    = local.resource_group_name
+  location               = var.location
   version                = "14"
   administrator_login    = "user"
   administrator_password = var.database_password
@@ -92,8 +87,8 @@ resource "azurerm_postgresql_flexible_server_database" "default" {
 }
 
 resource "azurerm_postgresql_flexible_server_firewall_rule" "default" {
-  name                = "all"
-  server_id           = azurerm_postgresql_flexible_server.default.id
-  start_ip_address    = "0.0.0.0"
-  end_ip_address      = "0.0.0.0"
+  name             = "all"
+  server_id        = azurerm_postgresql_flexible_server.default.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
 }
